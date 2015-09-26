@@ -10,7 +10,7 @@
 Parse.initialize("rddppjY9BaftUHY50Ze84iO4iSBB2tEmnyJvgwyf", "GwRsQZtgtLZSDtsokHW9hXeDBQq5pWCV1Se7EQRk");
 // create the module and name it scotchApp
 var myApp = angular.module('myApp', ['ngMap','ngDialog']);
-
+var currentUserLocation;
 
 myApp.controller('AppController', function($scope, ngDialog ) {
 //    $scope.message = 'Contact us! JK. This is just a demo.';
@@ -84,6 +84,7 @@ myApp.controller('AppController', function($scope, ngDialog ) {
                 console.log(userPosition.coords.latitude);
                 console.log(userPosition.coords.longitude);
                 $scope.userLocation = userPosition;
+                currentUserLocation = userPosition;
                 console.log($scope.userLocation)
                 $scope.$apply();
             },
@@ -95,13 +96,9 @@ myApp.controller('AppController', function($scope, ngDialog ) {
     setInterval( function () {
          $scope.getLocation({
             success:function(userPosition){
-//              $scope.userLocation.coords.latitude = $scope.userLocation.coords.latitude + 1;
-//                $scope.$apply();
-//              console.log($scope.userLocation.coords.latitude);
-//              console.log(userPosition.coords.longitude);
-//                
-//              $scope.userLocation = userPosition;
               $scope.userLocation = userPosition;
+              currentUserLocation = userPosition;
+              updateUserLocation(userPosition); 
                 $scope.$apply();
             },
             fail:function(){
@@ -132,9 +129,21 @@ myApp.controller('AppController', function($scope, ngDialog ) {
     }
     
     //if no current user, open the register Dialog
-    $scope.openRegisterDialog()
+    if(!Parse.User.current()){
+        $scope.openRegisterDialog()
+    }else{
+        // update user locations
+    }
 
 });
+
+var updateUserLocation = function(location){
+    var currentUser = Parse.User.current();
+    var point = new Parse.GeoPoint({latitude: location.coords.latitude, longitude: location.coords.longitude});
+//    console.log()
+    currentUser.set("currentLocation",point);
+    currentUser.save();
+}
 
 myApp.controller('RegisterController', function ($scope) {
 	$scope.register = function(username, password) {
