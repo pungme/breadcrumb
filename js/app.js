@@ -27,26 +27,45 @@ myApp.controller('AppController', function($scope, ngDialog ) {
         return Math.sqrt(num) * 100;
     }
 
+    $scope.fakeUserLocation = [48.124236, 11.598402];
+    $scope.fakeOpponentUserLocation = [48.124979, 11.599054];
     $scope.userLocation;
     $scope.latit;
     $scope.longit;
     $scope.markerScale = 2;
 
     $scope.locationList = [
-        [48.124178, 11.598378, true],
-        [48.124156, 11.598410, true],
-        [48.124129, 11.598443, true],
-        [48.124152, 11.598498, true],
-        [48.124188, 11.598477, true],
-        [48.124219, 11.598506, true],
-        [48.124190, 11.598648, true],
-        [48.124139, 11.598576, true],
-        [48.124079, 11.598655, true],
-        [48.124160, 11.598651, true],
-        [48.124232, 11.598709, true]
+        [48.124236, 11.598402, true],
+        [48.124247, 11.598503, true],
+        [48.124302, 11.598636, true],
+        [48.124297, 11.598772, true],
+        [48.124249, 11.598884, true],
+        [48.124206, 11.598950, true],
+        [48.124132, 11.599025, true],
+        [48.124061, 11.598993, true],
+        [48.124007, 11.598912, true],
+        [48.123968, 11.598859, true],
+        [48.124154, 11.598772, true],
+        [48.124124, 11.597461, true],
+        [48.123655, 11.597796, true],
+        [48.124557, 11.598196, true],
+        [48.123767, 11.597369, true],
     ];
 
 
+    $scope.opponentLocationList = [
+        [48.124979, 11.599054],
+        [48.124921, 11.598952],
+        [48.124863, 11.598844],
+        [48.124798, 11.598730],
+        [48.124737, 11.598660],
+        [48.124654, 11.598741],
+        [48.124607, 11.598822],
+        [48.124506, 11.598795],
+        [48.124416, 11.598752],
+        [48.124257, 11.598730],
+        [48.124200, 11.598747],
+    ]
 
     $scope.image = {
         url: 'img/beer.png',
@@ -57,7 +76,33 @@ myApp.controller('AppController', function($scope, ngDialog ) {
 
 
 
+    setInterval(function () {
+        if($scope.locationList.length > 5){
+            $scope.locationList.shift();
+            $scope.fakeUserLocation = $scope.locationList[0];
+            $scope.$apply();
+        }
+    },2000);
     
+    setTimeout(function(){
+        setInterval(function () {
+//        if($scope.locationList.length > 5){
+            $scope.opponentLocationList.shift();
+            $scope.fakeOpponentUserLocation = $scope.opponentLocationList[0];
+            $scope.$apply();
+            if($scope.opponentLocationList.length == 0){
+                $scope.markerScale = "0";
+            }
+//        }
+        },1500);
+    }, 9000);
+//    setInterval(function () {
+////        if($scope.locationList.length > 5){
+//            $scope.opponentLocationList.shift();
+//            $scope.fakeOpponentUserLocation = $scope.opponentLocationList[0];
+//            $scope.$apply();
+////        }
+//    },1800);
 
     $scope.getLocation = function(callback){
         var stillWaitForUserLocation = true;
