@@ -61,15 +61,34 @@ myApp.controller('AppController', function($scope) {
         //TODO: timeout call fail
     }
      
-    // todo: time interval getting user location
-    $scope.getLocation({
+     $scope.getLocation({
             success:function(userPosition){
-              console.log(userPosition);
+              console.log(userPosition.coords.latitude);
+              console.log(userPosition.coords.longitude);
               $scope.userLocation = userPosition;
+                $scope.$apply();
             },
             fail:function(){
                 //user denied the location
             }
     });
+//    setInterval(function(){ alert("Hello"); }, 3000);
+    setInterval( function () {
+         $scope.getLocation({
+            success:function(userPosition){
+              console.log(userPosition.coords.latitude);
+              console.log(userPosition.coords.longitude);
+              $scope.userLocation = userPosition;
+                $scope.$apply();
+            },
+            fail:function(){
+                //user denied the location
+         }
+    });
+    }, 
+    30000 //check every 30 seconds
+    );
+    
+    // todo: time interval getting user location
     
 });

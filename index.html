@@ -17,11 +17,15 @@
 
     </head>
     
-    <body>
-        <div class="container-fluid" ng-controller="AppController">
+    <body ng-controller="AppController">
+        
+        <div class="container-fluid">
             <map center="-34.397, 150.644" zoom="10"></map>
 
         </div>
+        
+        {{userLocation.coords.latitude }} , 
+        {{userLocation.coords.longitude }}
     </body>
     
 </html>
