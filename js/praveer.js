@@ -2,6 +2,9 @@ Parse.initialize("rddppjY9BaftUHY50Ze84iO4iSBB2tEmnyJvgwyf", "GwRsQZtgtLZSDtsokH
 
 var username = "Praveer";
 var pass = "praveer";
+var point = new Parse.GeoPoint({latitude: 43.0, longitude: -37.0});
+
+createBreadCrumb(username,point, "hallo" );
 
 Parse.User.logIn(username, pass, {
   success: function(user) {
@@ -57,4 +60,26 @@ function register(username, password){
 	    alert("Error: " + error.code + " " + error.message);
 	  }
 	});
+}
+
+function createBreadCrumb(username, geoPoint, note){
+	var BC = Parse.Object.extend("BreadCrum");
+	var bcVar = new BC();
+
+	bcVar.set("username", username);
+	bcVar.set("note", note);
+	bcVar.set("geoPoint", geoPoint);
+
+	bcVar.save(null, {
+	  success: function(bcVar) {
+	    // Execute any logic that should take place after the object is saved.
+	    alert('New breadcrumb created with objectId: ' + bcVar.id);
+	  },
+	  error: function(bcVar, error) {
+	    // Execute any logic that should take place if the save fails.
+	    // error is a Parse.Error with an error code and message.
+	    alert('Failed to create new object, with error code: ' + error.message);
+	  }
+	});
+
 }
