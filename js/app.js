@@ -13,8 +13,8 @@ var myApp = angular.module('myApp', ['ngMap']);
 
 
 myApp.controller('AppController', function($scope) {
-    $scope.message = 'Contact us! JK. This is just a demo.';
-    console.log($scope.message);
+//    $scope.message = 'Contact us! JK. This is just a demo.';
+//    console.log($scope.message);
     $scope.positions = [{lat:37.7699298,lng:-122.4469157}];
 
     $scope.cities = {
@@ -34,7 +34,7 @@ myApp.controller('AppController', function($scope) {
         var stillWaitForUserLocation = true;
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function(position){
-                console.log("user accept location access");
+//                console.log("user accept location access");
                 stillWaitForUserLocation = false;
                 callback.success(position);
             },function(){
@@ -70,9 +70,13 @@ myApp.controller('AppController', function($scope) {
     setInterval( function () {
          $scope.getLocation({
             success:function(userPosition){
-              console.log(userPosition.coords.latitude);
-              console.log(userPosition.coords.longitude);
-              $scope.userLocation = userPosition;
+              $scope.userLocation.coords.latitude = $scope.userLocation.coords.latitude + 1;
+                $scope.$apply();
+              console.log($scope.userLocation.coords.latitude);
+//              console.log(userPosition.coords.longitude);
+//                
+//              $scope.userLocation = userPosition;
+//              $scope.userLocation = userPosition;
                 $scope.$apply();
             },
             fail:function(){
@@ -80,7 +84,7 @@ myApp.controller('AppController', function($scope) {
          }
     });
     },
-    30000 //check every 30 seconds
+    1000 //check every 30 seconds
     );
 
 });
