@@ -6,8 +6,8 @@
  */
 
 //init the freaking app
-Parse.initialize("rddppjY9BaftUHY50Ze84iO4iSBB2tEmnyJvgwyf", "GwRsQZtgtLZSDtsokHW9hXeDBQq5pWCV");
-
+//Parse.initialize("rddppjY9BaftUHY50Ze84iO4iSBB2tEmnyJvgwyf", "GwRsQZtgtLZSDtsokHW9hXeDBQq5pWCV");
+Parse.initialize("rddppjY9BaftUHY50Ze84iO4iSBB2tEmnyJvgwyf", "GwRsQZtgtLZSDtsokHW9hXeDBQq5pWCV1Se7EQRk");
 // create the module and name it scotchApp
 var myApp = angular.module('myApp', ['ngMap','ngDialog']);
 
@@ -139,7 +139,7 @@ myApp.controller('AppController', function($scope, ngDialog ) {
 myApp.controller('RegisterController', function ($scope) {
 	
 	$scope.startButtonClick = function(){
-		alert($scope.username + $scope.password);
+		//alert($scope.username + $scope.password);
 		register($scope.username, $scope.password);
 	}
     
@@ -162,7 +162,7 @@ function register(username, password) {
 			var userDetails = new UserDetails();
 
 			userDetails.set("userLevel", 0);
-			userDetails.set("user", user.id);
+			userDetails.set("user", {__type: "Pointer", className: "_User", objectId:user.id});
 
 			userDetails.save(null, {
 				success : function(userDetails) {
