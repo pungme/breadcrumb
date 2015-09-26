@@ -137,5 +137,49 @@ myApp.controller('AppController', function($scope, ngDialog ) {
 });
 
 myApp.controller('RegisterController', function ($scope) {
+	
+	$scope.startButtonClick = function(){
+		alert($scope.username + $scope.password);
+		register($scope.username, $scope.password);
+	}
     
 });
+
+
+function register(username, password) {
+
+	var user = new Parse.User();
+	user.set("username", username);
+	user.set("password", password);
+	
+	//user.set("userLevel", 0);
+
+	user.signUp(null, {
+		success : function(user) {
+			// Hooray! Let them use the app now.
+			// set user level to 0
+			var UserDetails = Parse.Object.extend("UserDetails");
+			var userDetails = new UserDetails();
+
+			userDetails.set("userLevel", 0);
+			userDetails.set("user", user.id);
+
+			userDetails.save(null, {
+				success : function(userDetails) {
+					// Execute any logic that should take place after the object is saved.
+					console.log('New userDetails created with objectId: ' + userDetails.id);
+				},
+				error : function(bcVar, error) {
+					// Execute any logic that should take place if the save fails.
+					// error is a Parse.Error with an error code and message.
+					console.log('Failed to create new object, with error code: '
+							+ error.message);
+				}
+			});
+		},
+		error : function(user, error) {
+			// Show the error message somewhere and let the user try again.
+			console.log("Error: " + error.code + " " + error.message);
+		}
+	});
+}
