@@ -8,15 +8,13 @@ var point = new Parse.GeoPoint({
 	longitude : -37.0
 });
 
-createBreadCrumb(username, point, "hallo");
-
 Parse.User.logIn(username, pass, {
 	success : function(user) {
 		var point = new Parse.GeoPoint({
 			latitude : 41.0,
 			longitude : -31.0
 		});
-		updateUserLocation("Praveer", point);
+		updateUserLocation(username, point);
 	},
 	error : function(user, error) {
 		// The login failed. Check error to see why.
@@ -55,93 +53,141 @@ function register(username, password) {
 	var user = new Parse.User();
 	user.set("username", username);
 	user.set("password", password);
+	
+	//user.set("userLevel", 0);
 
 	user.signUp(null, {
 		success : function(user) {
 			// Hooray! Let them use the app now.
+			// set user level to 0
+			var UserDetails = Parse.Object.extend("UserDetails");
+			var userDetails = new UserDetails();
+
+			userDetails.set("userLevel", 0);
+			userDetails.set("user", user.id);
+
+			userDetails.save(null, {
+				success : function(userDetails) {
+					// Execute any logic that should take place after the object is saved.
+					console.log('New userDetails created with objectId: ' + userDetails.id);
+				},
+				error : function(bcVar, error) {
+					// Execute any logic that should take place if the save fails.
+					// error is a Parse.Error with an error code and message.
+					console.log('Failed to create new object, with error code: '
+							+ error.message);
+				}
+			});
 		},
 		error : function(user, error) {
 			// Show the error message somewhere and let the user try again.
-			alert("Error: " + error.code + " " + error.message);
+			console.log("Error: " + error.code + " " + error.message);
 		}
 	});
 }
 
-function createBreadCrumb(username, geoPoint, note) {
+createBreadCrumb(username, point, "hallo");
+
+function createBreadCrumb(user, geoPoint, note) {
 	var BC = Parse.Object.extend("BreadCrum");
 	var bcVar = new BC();
 
-	bcVar.set("username", username);
+	bcVar.set("user", user.id);
 	bcVar.set("note", note);
 	bcVar.set("geoPoint", geoPoint);
 
 	bcVar.save(null, {
 		success : function(bcVar) {
 			// Execute any logic that should take place after the object is saved.
-			alert('New breadcrumb created with objectId: ' + bcVar.id);
+			console.log('New breadcrumb created with objectId: ' + bcVar.id);
 		},
 		error : function(bcVar, error) {
 			// Execute any logic that should take place if the save fails.
 			// error is a Parse.Error with an error code and message.
-			alert('Failed to create new object, with error code: '
+			console.log('Failed to create new object, with error code: '
 					+ error.message);
 		}
 	});
+}
 
 	function eatUser(user1, user2) {
 
-		var user1Level = user1.get('userLevel');
-		var user1name = user1.get('username');
-		console.log(user1.get('username') + " " + user1.get('userLevel'))
-		var user2Level = user2.get('userLevel');
-		var user2name = user2.get('username');
-		console.log(user2.get('username') + " " + user2.get('userLevel'))
+	    var user1Id = user1.id;
+	    var user2Id = user2.id;
 
-		// no point of executing below if one of the users have 0 level
-		if (user1Level > 0 && user2Level > 0) {
-			if (user1Level > user2Level) {
+	    var UserDetails = Parse.Object.extend("UserDetails");
+	    var queryUserDetails = new Parse.Query(UserDetails);
 
-				user1.save(null, {
-					success : function(user) {
-						user.set("userLevel", user1Level + user2Level);
-						var eatenUserArray = user.get("eatenUsers");
-						if (eatenUserArray.indexOf(user2name) == -1) {
-							eatenUserArray.push(user2name);
-						}
-						user.set("eatenUsers", eatenUserArray);
-						user.save();
-					}
-				});
+	    queryUserDetails.equalTo("user", {__type: "Pointer", className: "_User", objectId:user1Id});
+	    queryUserDetails.find({
+	        success: function(results) {
+	            console.log("Successfully retrieved " + results.length );
+	            // Do something with the returned Parse.Object values
+	            var user1Detail = results[0];
 
-				user2.save(null, {
-					success : function(user) {
-						user.set("userLevel", 0);
-						user.save();
-					}
-				});
+	            queryUserDetails.equalTo("user", {__type: "Pointer", className: "_User", objectId:user2Id});
+	            queryUserDetails.find({
+	                success: function(results) {
+	                    console.log("Successfully retrieved " + results.length );
+	                    // Do something with the returned Parse.Object values
+	                    var user2Detail = results[0];
 
-			} else if (user1Level < user2Level) {
+	                    var user1Level = user1Detail.get('userLevel');
+	                    var user2Level = user2Detail.get('userLevel');
 
-				user2.save(null, {
-					success : function(user) {
-						user.set("userLevel", user1Level + user2Level);
-						var eatenUserArray = user.get("eatenUsers");
-						if (eatenUserArray.indexOf(user1name) == -1) {
-							eatenUserArray.push(user1name);
-						}
-						user.set("eatenUsers", eatenUserArray);
-						user.save();
-					}
-				});
+	                    if (user1Level > 0 && user2Level > 0) {
+	                        if (user1Level > user2Level) {
 
-				user1.save(null, {
-					success : function(user) {
-						user.set("userLevel", 0);
-						user.save();
-					}
-				});
-			}
-		}
+	                            user2Detail.save(null, {
+	                                success : function(userDetail) {
+	                                    userDetail.set("userLevel", 0);
+	                                    userDetail.save();
+	                                }
+	                            });
+
+	                            user1Detail.save(null, {
+	                                success : function(userDetail) {
+	                                    userDetail.set("userLevel", user1Level + user2Level);
+	                                    var eatenUserArray = userDetail.get("eatenUsers");
+	                                    if (eatenUserArray !== undefined && eatenUserArray.indexOf(user2Id) == -1) {
+	                                        eatenUserArray.push(user2Id);
+	                                    }
+	                                    userDetail.set("eatenUsers", eatenUserArray);
+	                                    userDetail.save();
+	                                }
+	                            });
+
+
+
+	                        } else if (user1Level < user2Level) {
+
+	                            user2Detail.save(null, {
+	                                success : function(userDetail) {
+	                                    userDetail.set("userLevel", user1Level + user2Level);
+	                                    var eatenUserArray = userDetail.get("eatenUsers");
+	                                    if (eatenUserArray !== undefined && eatenUserArray.indexOf(user1Id) == -1) {
+	                                        eatenUserArray.push(user1Id);
+	                                    }
+	                                    userDetail.set("eatenUsers", eatenUserArray);
+	                                    userDetail.save();
+	                                }
+	                            });
+
+	                            user1Detail.save(null, {
+	                                success : function(userDetail) {
+	                                    userDetail.set("userLevel", 0);
+	                                    userDetail.save();
+	                                }
+	                            });
+	                        }
+	                    }
+
+
+	                }
+	            });
+
+	        }
+	    });
 	}
 
 	function eatBreadCrumb(user, point) {
@@ -159,6 +205,5 @@ function createBreadCrumb(username, geoPoint, note) {
 				user.save();
 			}
 		});
-	}
-
+	
 }

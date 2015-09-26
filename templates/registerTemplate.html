@@ -1,12 +1,13 @@
+<div ng-controller="RegisterController">
 <div id="register-header" class="animated bounceIn">
     Register <i class="fa fa-cogs"></i>
 </div>
 
 <div id="setting-form" >
     <form>
-        <input type="text" id="text-userinput" placeholder="USERNAME">
+        <input type="text" id="text-userinput" ng-model="username" placeholder="USERNAME">
         <br>
-        <input type="text" id="text-userinput" placeholder="">
+        <input type="text" id="text-userinput" ng-model="password" placeholder="">
         <br>
 </form>
 <!--
@@ -18,7 +19,7 @@
 </div>
 
 <div id="square-button">
-    <a id="square-border" ng-click="startButtonClick()">
+    <a id="square-border" ng-click="startButtonClick()" >
      START
     </a>
 </div>
@@ -58,3 +59,5 @@
              DONE
             </a>
         </div>-->
+        
+ </div>

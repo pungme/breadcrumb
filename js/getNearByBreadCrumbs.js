@@ -14,6 +14,28 @@ function getNearByBreadCrumbs(userLatitude, userLongitude) {
     var query = new Parse.Query(BreadCrum);
 
     query.near("geoPoint", currentUserGeoPoint);
+//    query.limit(10);
+    query.find({
+        success: function(nearByBreadCrumbs) {
+
+            for (var i=0; i< nearByBreadCrumbs.length; i++) {
+                console.log("User" + i + ": " + nearByBreadCrumbs[i].get("geoPoint").latitude
+                + "," + nearByBreadCrumbs[i].get("geoPoint").longitude);
+
+                var latitude = nearByBreadCrumbs[i].get("geoPoint").latitude;
+                var longitude = nearByBreadCrumbs[i].get("geoPoint").longitude;
+            }
+        }
+    });
+}
+
+function getNearByUsers(userLatitude, userLongitude) {
+
+    var currentUserGeoPoint = new Parse.GeoPoint({latitude: userLatitude, longitude: userLongitude});
+
+    var query = new Parse.Query(User);
+
+    query.near("currentLocation", currentUserGeoPoint);
     query.limit(10);
     query.find({
         success: function(nearByUsers) {

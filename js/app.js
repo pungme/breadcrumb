@@ -6,11 +6,11 @@
  */
 
 //init the freaking app
-Parse.initialize("rddppjY9BaftUHY50Ze84iO4iSBB2tEmnyJvgwyf", "GwRsQZtgtLZSDtsokHW9hXeDBQq5pWCV");
-
+//Parse.initialize("rddppjY9BaftUHY50Ze84iO4iSBB2tEmnyJvgwyf", "GwRsQZtgtLZSDtsokHW9hXeDBQq5pWCV");
+Parse.initialize("rddppjY9BaftUHY50Ze84iO4iSBB2tEmnyJvgwyf", "GwRsQZtgtLZSDtsokHW9hXeDBQq5pWCV1Se7EQRk");
 // create the module and name it scotchApp
 var myApp = angular.module('myApp', ['ngMap','ngDialog']);
-
+var currentUserLocation;
 
 myApp.controller('AppController', function($scope, ngDialog ) {
 //    $scope.message = 'Contact us! JK. This is just a demo.';
@@ -90,7 +90,8 @@ myApp.controller('AppController', function($scope, ngDialog ) {
                 console.log(userPosition.coords.latitude);
                 console.log(userPosition.coords.longitude);
                 $scope.userLocation = userPosition;
-                console.log($scope.userLocation);
+                currentUserLocation = userPosition;
+                console.log($scope.userLocation)
                 $scope.$apply();
             },
             fail:function(){
@@ -102,13 +103,6 @@ myApp.controller('AppController', function($scope, ngDialog ) {
     setInterval( function () {
          $scope.getLocation({
             success:function(userPosition){
-//              $scope.userLocation.coords.latitude = $scope.userLocation.coords.latitude + 1;
-//                $scope.$apply();
-//              console.log($scope.userLocation.coords.latitude);
-//              console.log(userPosition.coords.longitude);
-//                
-//              $scope.userLocation = userPosition;
-              //$scope.userLocation = userPosition;
                 userPosition.coords.latitude =userPosition.coords.latitude + count;
                 var us = userPosition;
                 //us.coords.latitude = us.coords.latitude + 1;
@@ -120,6 +114,9 @@ myApp.controller('AppController', function($scope, ngDialog ) {
                 $scope.markerScale +=1;
                 console.log($scope.latit);
                 console.log($scope.longit);
+              $scope.userLocation = userPosition;
+              currentUserLocation = userPosition;
+              updateUserLocation(userPosition);
                 $scope.$apply();
             },
             fail:function(){
@@ -150,12 +147,108 @@ myApp.controller('AppController', function($scope, ngDialog ) {
     }
     
     //if no current user, open the register Dialog
-    $scope.openRegisterDialog();
+    if(!Parse.User.current()){
+        $scope.openRegisterDialog()
+    }else{
+        // update user locations
+    }
 
 });
 
 
+var updateUserLocation = function(location){
+    var currentUser = Parse.User.current();
+    var point = new Parse.GeoPoint({latitude: location.coords.latitude, longitude: location.coords.longitude});
+//    console.log()
+//    currentUser.set("currentLocation",point);
+//    currentUser.save();
+}
 
 myApp.controller('RegisterController', function ($scope) {
-    console.log("hello");
+	$scope.register = function(username, password) {
+
+        var user = new Parse.User();
+        user.set("username", username);
+        user.set("password", password);
+
+        //user.set("userLevel", 0);
+
+        user.signUp(null, {
+            success : function(user) {
+                // Hooray! Let them use the app now.
+                // set user level to 0
+                var UserDetails = Parse.Object.extend("UserDetails");
+                var userDetails = new UserDetails();
+
+                userDetails.set("userLevel", 0);
+                userDetails.set("user", {__type: "Pointer", className: "_User", objectId:user.id});
+
+                userDetails.save(null, {
+                    success : function(userDetails) {
+                        // Execute any logic that should take place after the object is saved.
+                        console.log('New user created with objectId: ' + userDetails.id);
+                        // start the game !
+                    },
+                    error : function(bcVar, error) {
+                        // Execute any logic that should take place if the save fails.
+                        // error is a Parse.Error with an error code and message.
+                        console.log('Failed to create new object, with error code: '
+                                + error.message);
+
+                    }
+                });
+            },
+            error : function(user, error) {
+                // Show the error message somewhere and let the user try again.
+                console.log("Error: " + error.code + " " + error.message);
+            }
+        });
+    }
+	$scope.startButtonClick = function(){
+		//alert($scope.username + $scope.password);
+		$scope.register($scope.username, $scope.password);
+        $scope.closeThisDialog();
+	}
+    
 });
+
+
+//function register(username, password) {
+//
+//	var user = new Parse.User();
+//	user.set("username", username);
+//	user.set("password", password);
+//	
+//	//user.set("userLevel", 0);
+//
+//	user.signUp(null, {
+//		success : function(user) {
+//			// Hooray! Let them use the app now.
+//			// set user level to 0
+//			var UserDetails = Parse.Object.extend("UserDetails");
+//			var userDetails = new UserDetails();
+//
+//			userDetails.set("userLevel", 0);
+//			userDetails.set("user", {__type: "Pointer", className: "_User", objectId:user.id});
+//
+//			userDetails.save(null, {
+//				success : function(userDetails) {
+//					// Execute any logic that should take place after the object is saved.
+//					console.log('New user created with objectId: ' + userDetails.id);
+//                    // start the game !
+//				},
+//				error : function(bcVar, error) {
+//					// Execute any logic that should take place if the save fails.
+//					// error is a Parse.Error with an error code and message.
+//					console.log('Failed to create new object, with error code: '
+//							+ error.message);
+//                    
+//				}
+//			});
+//		},
+//		error : function(user, error) {
+//			// Show the error message somewhere and let the user try again.
+//			console.log("Error: " + error.code + " " + error.message);
+//		}
+//	});
+//}
