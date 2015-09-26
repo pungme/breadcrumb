@@ -38,7 +38,13 @@
 
 <div class="container-fluid">
 
-        <map center="{{userLocation.coords.latitude}}, {{userLocation.coords.longitude}}" zoom="17" map-type-id="TERRAIN" class="mapcanvas" street-view-control="false">
+        <map center="{{userLocation.coords.latitude}}, {{userLocation.coords.longitude}}" zoom="17"
+           map-type-id="TERRAIN" class="mapcanvas" 
+          street-view-control="false"
+          disable-default-u-i="true"
+          zoom-control="false"
+          draggable="false">
+>
             <marker position="{{latit}}, {{longit}}" icon="{path:'CIRCLE', scale: 10}" id="markerInit"></marker>
         </map>
 </div>
