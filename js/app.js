@@ -32,32 +32,12 @@ myApp.controller('AppController', function($scope, ngDialog ) {
     $scope.longit;
     $scope.markerScale = 10;
 
-    //@pung get current location code
-    
-//    $scope.updateUserLocation = function(username, geoLocation) {
-//        var User = Parse.Object.extend("User");
-//        var query = new Parse.Query(User);
-//        query.equalTo("username", username);
-//        query.find({
-//          success: function(results) {
-//            console.log("Successfully retrieved " + results.length + " user.");
-//            // Do something with the returned Parse.Object values
-//               user = results[0];
-//              console.log(user.id + ' - ' + user.get('username'));
-//
-//            user.save(null, {
-//              success: function(user) {
-//                user.set("currentLocation",geoLocation);
-//                user.save();
-//              }
-//            });
-//
-//          },
-//          error: function(error) {
-//            console.log("Error: " + error.code + " " + error.message);
-//          }
-//        });
-//    }
+    $scope.image = {
+        url: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png',
+        scaledSize: [20, 32],
+        origin: [0,0],
+        anchor: [0, 32]
+    };
 
     
     $scope.getLocation = function(callback){
@@ -114,6 +94,7 @@ myApp.controller('AppController', function($scope, ngDialog ) {
                 $scope.markerScale +=1;
                 console.log($scope.latit);
                 console.log($scope.longit);
+                console.log($scope.image);
               $scope.userLocation = userPosition;
               currentUserLocation = userPosition;
               updateUserLocation(userPosition);
