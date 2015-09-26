@@ -205,6 +205,5 @@ function createBreadCrumb(user, geoPoint, note) {
 				user.save();
 			}
 		});
-	}
-
+	
 }
