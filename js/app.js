@@ -34,4 +34,17 @@ var myApp = angular.module('myApp', ['ngMap']);
 myApp.controller('AppController', function($scope) {
     $scope.message = 'Contact us! JK. This is just a demo.';
     console.log($scope.message);
+    $scope.positions = [{lat:37.7699298,lng:-122.4469157}];
+
+    $scope.cities = {
+        chicago: {population:27, position: [41.878113, -87.629798]},
+        newyork: {population:53, position: [40.714352, -74.005973]},
+        losangeles: {population:82, position: [34.052234, -118.243684]},
+        vancouver: {population:56, position: [49.25, -123.1]},
+    }
+    $scope.getRadius = function(num) {
+        return Math.sqrt(num) * 100;
+    }
+
+
 });
