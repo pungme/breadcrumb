@@ -132,7 +132,7 @@ myApp.controller('AppController', function($scope, ngDialog ) {
     }
     
     //if no current user, open the register Dialog
-//    $scope.openRegisterDialog();
+    $scope.openRegisterDialog();
 
 });
 
