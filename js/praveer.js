@@ -190,20 +190,34 @@ function createBreadCrumb(user, geoPoint, note) {
 	    });
 	}
 
-	function eatBreadCrumb(user, point) {
 
-		var userLevel = user.get('userLevel');
-		var userName = user.get('username');
-		console.log(user.get('username') + " " + user.get('userLevel'))
+function eatBreadCrumb(user, breadCrumLocation) {
 
-		user.save(null, {
-			success : function(user) {
-				user.set("userLevel", userLevel + 1);
-				var eatenUserBCs = user.get("eatenBreadCrumbs");
-				eatenUserBCs.push(point);
-				user.set("eatenBreadCrumbs", eatenUserBCs);
-				user.save();
-			}
-		});
-	
+	var UserDetails = Parse.Object.extend("UserDetails");
+	var queryUserDetails = new Parse.Query(UserDetails);
+
+	queryUserDetails.equalTo("user", {
+		__type : "Pointer",
+		className : "_User",
+		objectId : user.id
+	});
+	queryUserDetails.find({
+		success : function(results) {
+			console.log("Successfully retrieved " + results.length);
+			// Do something with the returned Parse.Object values
+			var userDetail = results[0];
+			var userLevel = userDetail.get('userLevel');
+
+			userDetail.save(null, {
+				success : function(userDetail) {
+					userDetail.set("userLevel", userLevel + 1);
+					var eatenUserBCs = userDetail.get("eatenBreadCrumbs");
+					eatenUserBCs.push(breadCrumLocation);
+					userDetail.set("eatenBreadCrumbs", eatenUserBCs);
+					userDetail.save();
+				}
+			});
+		}
+	});
+
 }
