@@ -32,13 +32,6 @@ myApp.controller('AppController', function($scope, ngDialog ) {
     $scope.longit;
     $scope.markerScale = 10;
 
-    $scope.image = {
-        url: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png',
-        scaledSize: [20, 32],
-        origin: [0,0],
-        anchor: [0, 32]
-    };
-
     
     $scope.getLocation = function(callback){
         var stillWaitForUserLocation = true;
@@ -98,6 +91,7 @@ myApp.controller('AppController', function($scope, ngDialog ) {
               $scope.userLocation = userPosition;
               currentUserLocation = userPosition;
               updateUserLocation(userPosition);
+                $scope.getNearByUsers(userPosition.coords.latitude,userPosition.coords.longitude)
                 $scope.$apply();
             },
             fail:function(){
@@ -107,7 +101,7 @@ myApp.controller('AppController', function($scope, ngDialog ) {
     },3000);
     
     $scope.openRegisterDialog = function() {
-//        $scope.setMainViewBlur(true);
+        $scope.setMainViewBlur(true);
         ngDialog.open({
             template: 'templates/registerTemplate.html',
             controller: 'RegisterController',
@@ -121,19 +115,42 @@ myApp.controller('AppController', function($scope, ngDialog ) {
     
     $scope.setMainViewBlur = function(isBlur){
         if(isBlur){
-            $('#main-view').addClass("blur");
+            $('#map-main').addClass("blur");
         }else{
-            $('#main-view').removeClass("blur");
+            $('#map-main').removeClass("blur");
         }
     }
     
     //if no current user, open the register Dialog
-    if(!Parse.User.current()){
+//    if(!Parse.User.current()){
         $scope.openRegisterDialog()
-    }else{
+//    }else{
+//        $scope.getNearByUsers(userPosition.coords.latitude,userPosition.coords.longitude)
         // update user locations
-    }
+//    }
 
+    
+    $scope.getNearByUsers = function (userLatitude, userLongitude) {
+
+        var currentUserGeoPoint = new Parse.GeoPoint({latitude: userLatitude, longitude: userLongitude});
+var User  = Parse.Object.extend("User");
+        var query = new Parse.Query(User);
+
+        query.near("currentLocation", currentUserGeoPoint);
+        query.find({
+            success: function(nearByUsers) {
+                console.log(nearByUsers);
+//                for (var i=0; i< nearByUsers.length; i++) {
+//                    console.log("User" + i + ": " + nearByUsers[i].get("geoPoint").latitude
+//                    + "," + nearByUsers[i].get("geoPoint").longitude);
+//
+//                    var latitude = nearByUsers[i].get("geoPoint").latitude;
+//                    var longitude = nearByUsers[i].get("geoPoint").longitude;
+//                }
+            }
+        });
+    }
+    
 });
 
 
@@ -150,7 +167,7 @@ myApp.controller('RegisterController', function ($scope) {
 
         var user = new Parse.User();
         user.set("username", username);
-        user.set("password", password);
+        user.set("password", "123");
 
         //user.set("userLevel", 0);
 
@@ -170,7 +187,7 @@ myApp.controller('RegisterController', function ($scope) {
                         console.log('New user created with objectId: ' + userDetails.id);
                         // start the game !
                     },
-                    error : function(bcVar, error) {
+                    error : function(userDetails, error) {
                         // Execute any logic that should take place if the save fails.
                         // error is a Parse.Error with an error code and message.
                         console.log('Failed to create new object, with error code: '
@@ -218,7 +235,7 @@ myApp.controller('RegisterController', function ($scope) {
 //					console.log('New user created with objectId: ' + userDetails.id);
 //                    // start the game !
 //				},
-//				error : function(bcVar, error) {
+//				error : function(userDetails, error) {
 //					// Execute any logic that should take place if the save fails.
 //					// error is a Parse.Error with an error code and message.
 //					console.log('Failed to create new object, with error code: '

@@ -36,13 +36,16 @@
 
 <body ng-controller="AppController">
 <!--<div id="map"></div>-->
+<div class="container-fluid" id="map-main">
 
-<div class="container-fluid">
-    {{markerScale}}
+        <map center="48.1241775,11.5983257" zoom="19"
+          class="mapcanvas" 
+          street-view-control="false"
+          disable-default-u-i="true"
+          zoom-control="false"
+          draggable="false">
 
-        <map center="{{userLocation.coords.latitude}}, {{userLocation.coords.longitude}}" zoom="17" map-type-id="TERRAIN" class="mapcanvas" street-view-control="false">
-            <!--<marker position="{{latit}}, {{longit}}"  icon="{{image}}" id="markerInit"></marker>-->
-
+<!--            <marker position="{{latit}}, {{longit}}" icon="{path:'CIRCLE', scale: 10}" id="markerInit"></marker>-->
             <shape name="circle" stroke-color="#FF0000" stroke-opacity="0.8" stroke-weight="2" fill-color="#FF0000" labelContent= "A"
                    fill-opacity="0.8" center="{{latit}}, {{longit}}" radius={{markerScale}}>
 
