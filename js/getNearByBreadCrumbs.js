@@ -14,7 +14,7 @@ function getNearByBreadCrumbs(userLatitude, userLongitude) {
     var query = new Parse.Query(BreadCrum);
 
     query.near("geoPoint", currentUserGeoPoint);
-    query.limit(10);
+//    query.limit(10);
     query.find({
         success: function(nearByUsers) {
 
