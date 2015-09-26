@@ -8,8 +8,6 @@ var point = new Parse.GeoPoint({
 	longitude : -37.0
 });
 
-createBreadCrumb(username, point, "hallo");
-
 Parse.User.logIn(username, pass, {
 	success : function(user) {
 		var point = new Parse.GeoPoint({
@@ -67,11 +65,13 @@ function register(username, password) {
 	});
 }
 
-function createBreadCrumb(username, geoPoint, note) {
+createBreadCrumb(username, point, "hallo");
+
+function createBreadCrumb(user, geoPoint, note) {
 	var BC = Parse.Object.extend("BreadCrum");
 	var bcVar = new BC();
 
-	bcVar.set("username", username);
+	bcVar.set("user", user.get('objectId'));
 	bcVar.set("note", note);
 	bcVar.set("geoPoint", geoPoint);
 
