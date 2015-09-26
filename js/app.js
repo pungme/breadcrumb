@@ -28,6 +28,10 @@ myApp.controller('AppController', function($scope, ngDialog ) {
     }
 
     $scope.userLocation;
+    $scope.latit;
+    $scope.longit;
+    $scope.markerScale = 10;
+
     //@pung get current location code
     
 //    $scope.updateUserLocation = function(username, geoLocation) {
@@ -54,6 +58,7 @@ myApp.controller('AppController', function($scope, ngDialog ) {
 //          }
 //        });
 //    }
+
     
     $scope.getLocation = function(callback){
         var stillWaitForUserLocation = true;
@@ -79,18 +84,20 @@ myApp.controller('AppController', function($scope, ngDialog ) {
         //TODO: timeout call fail
     }
 
+    var count = 0;
      $scope.getLocation({
             success:function(userPosition){
                 console.log(userPosition.coords.latitude);
                 console.log(userPosition.coords.longitude);
                 $scope.userLocation = userPosition;
-                console.log($scope.userLocation)
+                console.log($scope.userLocation);
                 $scope.$apply();
             },
             fail:function(){
                 //user denied the location
             }
     });
+    var gPos;
 //    setInterval(function(){ alert("Hello"); }, 3000);
     setInterval( function () {
          $scope.getLocation({
@@ -101,15 +108,25 @@ myApp.controller('AppController', function($scope, ngDialog ) {
 //              console.log(userPosition.coords.longitude);
 //                
 //              $scope.userLocation = userPosition;
-              $scope.userLocation = userPosition;
-                console.log($scope.userLocation);
+              //$scope.userLocation = userPosition;
+                userPosition.coords.latitude =userPosition.coords.latitude + count;
+                var us = userPosition;
+                //us.coords.latitude = us.coords.latitude + 1;
+                gPos = userPosition.coords.latitude + count;
+                count = count+0.00005;
+                console.log(gPos);
+                $scope.latit = gPos;
+                $scope.longit = userPosition.coords.longitude;
+                $scope.markerScale +=1;
+                console.log($scope.latit);
+                console.log($scope.longit);
                 $scope.$apply();
             },
             fail:function(){
                 //user denied the location
          }
     });
-    },10000);
+    },3000);
     
     $scope.openRegisterDialog = function() {
 //        $scope.setMainViewBlur(true);
@@ -133,10 +150,12 @@ myApp.controller('AppController', function($scope, ngDialog ) {
     }
     
     //if no current user, open the register Dialog
-//    $scope.openRegisterDialog();
+    $scope.openRegisterDialog();
 
 });
 
+
+
 myApp.controller('RegisterController', function ($scope) {
-    
+    console.log("hello");
 });
