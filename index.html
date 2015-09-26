@@ -18,9 +18,9 @@
 <body ng-controller="AppController">
 {{userLocation.latitude}}
 <div class="container-fluid">
-    <map center="40.714352, -74.005973" zoom="3" on-click="addMarker()" map-type-id="TERRAIN" class="mapcanvas">
+    <map center="{{userLocation.coords.latitude}}, {{userLocation.coords.longitude}}" zoom="18" on-click="addMarker()" map-type-id="TERRAIN" class="mapcanvas">
         <!--<marker ng-repeat="city in cities" position="{{city.position[0]}}, {{city.position[1]}}"></marker>-->
-        <marker position="{{userLocation.latitude}}, {{userLocation.longitude}}"></marker>
+        <marker position="{{userLocation.coords.latitude}}, {{userLocation.coords.longitude}}"></marker>
         <shape name="circle" ng-repeat="city in cities" stroke-color="#FF0000" stroke-opacity="0.8" stroke-weight="2"
                fill-color="#FF0000" fill-opacity="0.35" center="{{city.position}}"
                radius="{{getRadius(city.population)}}">
