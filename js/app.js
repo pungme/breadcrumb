@@ -30,9 +30,35 @@ myApp.controller('AppController', function($scope, ngDialog ) {
     $scope.userLocation;
     $scope.latit;
     $scope.longit;
-    $scope.markerScale = 10;
+    $scope.markerScale = 2;
+
+    $scope.locationList = [
+        [48.124178, 11.598378, true],
+        [48.124156, 11.598410, true],
+        [48.124129, 11.598443, true],
+        [48.124152, 11.598498, true],
+        [48.124188, 11.598477, true],
+        [48.124219, 11.598506, true],
+        [48.124190, 11.598648, true],
+        [48.124139, 11.598576, true],
+        [48.124079, 11.598655, true],
+        [48.124160, 11.598651, true],
+        [48.124232, 11.598709, true]
+    ];
+
+
+
+    $scope.image = {
+        url: 'img/beer.png',
+        size: [150, 92],
+        origin: [0,0],
+        anchor: [0, 32]
+    };
+
+
 
     
+
     $scope.getLocation = function(callback){
         var stillWaitForUserLocation = true;
         if (navigator.geolocation) {

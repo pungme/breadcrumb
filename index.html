@@ -45,11 +45,18 @@
           zoom-control="false"
           draggable="false">
 
-<!--            <marker position="{{latit}}, {{longit}}" icon="{path:'CIRCLE', scale: 10}" id="markerInit"></marker>-->
+            <div ng-repeat="location in locationList">
+            <marker position='{{location[0] + "," + location[1]}}' icon="{{image}}" id="markerInit"></marker>
+            </div>
             <shape name="circle" stroke-color="#FF0000" stroke-opacity="0.8" stroke-weight="2" fill-color="#FF0000" labelContent= "A"
-                   fill-opacity="0.8" center="{{latit}}, {{longit}}" radius={{markerScale}}>
+                   fill-opacity="0.3" center="48.1241775,11.5983257" radius={{markerScale}}>
 
             </shape>
+
+<!--            <shape name="circle"  ng-repeat="location in locationList" stroke-color="#FF0000" stroke-opacity="0.8" stroke-weight="2" fill-color="#FF0000" labelContent= "A"
+                   fill-opacity="0.3" center="location" radius="5">
+
+            </shape>-->
         </map>
 
 </div>
