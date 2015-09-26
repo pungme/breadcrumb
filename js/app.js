@@ -30,31 +30,6 @@ myApp.controller('AppController', function($scope, ngDialog ) {
     $scope.userLocation;
     //@pung get current location code
     
-//    $scope.updateUserLocation = function(username, geoLocation) {
-//        var User = Parse.Object.extend("User");
-//        var query = new Parse.Query(User);
-//        query.equalTo("username", username);
-//        query.find({
-//          success: function(results) {
-//            console.log("Successfully retrieved " + results.length + " user.");
-//            // Do something with the returned Parse.Object values
-//               user = results[0];
-//              console.log(user.id + ' - ' + user.get('username'));
-//
-//            user.save(null, {
-//              success: function(user) {
-//                user.set("currentLocation",geoLocation);
-//                user.save();
-//              }
-//            });
-//
-//          },
-//          error: function(error) {
-//            console.log("Error: " + error.code + " " + error.message);
-//          }
-//        });
-//    }
-    
     $scope.getLocation = function(callback){
         var stillWaitForUserLocation = true;
         if (navigator.geolocation) {
@@ -98,7 +73,8 @@ myApp.controller('AppController', function($scope, ngDialog ) {
             success:function(userPosition){
               $scope.userLocation = userPosition;
               currentUserLocation = userPosition;
-              updateUserLocation(userPosition); 
+              updateUserLocation(userPosition);
+                $scope.getNearByUsers(userPosition.coords.latitude,userPosition.coords.longitude)
                 $scope.$apply();
             },
             fail:function(){
@@ -132,9 +108,32 @@ myApp.controller('AppController', function($scope, ngDialog ) {
     if(!Parse.User.current()){
         $scope.openRegisterDialog()
     }else{
+//        $scope.getNearByUsers(userPosition.coords.latitude,userPosition.coords.longitude)
         // update user locations
     }
 
+    
+    $scope.getNearByUsers = function (userLatitude, userLongitude) {
+
+        var currentUserGeoPoint = new Parse.GeoPoint({latitude: userLatitude, longitude: userLongitude});
+var User  = Parse.Object.extend("User");
+        var query = new Parse.Query(User);
+
+        query.near("currentLocation", currentUserGeoPoint);
+        query.find({
+            success: function(nearByUsers) {
+                console.log(nearByUsers);
+//                for (var i=0; i< nearByUsers.length; i++) {
+//                    console.log("User" + i + ": " + nearByUsers[i].get("geoPoint").latitude
+//                    + "," + nearByUsers[i].get("geoPoint").longitude);
+//
+//                    var latitude = nearByUsers[i].get("geoPoint").latitude;
+//                    var longitude = nearByUsers[i].get("geoPoint").longitude;
+//                }
+            }
+        });
+    }
+    
 });
 
 var updateUserLocation = function(location){
