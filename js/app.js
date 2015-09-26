@@ -28,6 +28,10 @@ myApp.controller('AppController', function($scope, ngDialog ) {
     }
 
     $scope.userLocation;
+    $scope.latit;
+    $scope.longit;
+    $scope.markerScale = 10;
+
     //@pung get current location code
     
     $scope.getLocation = function(callback){
@@ -54,6 +58,7 @@ myApp.controller('AppController', function($scope, ngDialog ) {
         //TODO: timeout call fail
     }
 
+    var count = 0;
      $scope.getLocation({
             success:function(userPosition){
                 console.log(userPosition.coords.latitude);
@@ -67,10 +72,22 @@ myApp.controller('AppController', function($scope, ngDialog ) {
                 //user denied the location
             }
     });
+    var gPos;
 //    setInterval(function(){ alert("Hello"); }, 3000);
     setInterval( function () {
          $scope.getLocation({
             success:function(userPosition){
+                userPosition.coords.latitude =userPosition.coords.latitude + count;
+                var us = userPosition;
+                //us.coords.latitude = us.coords.latitude + 1;
+                gPos = userPosition.coords.latitude + count;
+                count = count+0.00005;
+                console.log(gPos);
+                $scope.latit = gPos;
+                $scope.longit = userPosition.coords.longitude;
+                $scope.markerScale +=1;
+                console.log($scope.latit);
+                console.log($scope.longit);
               $scope.userLocation = userPosition;
               currentUserLocation = userPosition;
               updateUserLocation(userPosition);
@@ -81,7 +98,7 @@ myApp.controller('AppController', function($scope, ngDialog ) {
                 //user denied the location
          }
     });
-    },10000);
+    },3000);
     
     $scope.openRegisterDialog = function() {
 //        $scope.setMainViewBlur(true);
@@ -136,12 +153,13 @@ var User  = Parse.Object.extend("User");
     
 });
 
+
 var updateUserLocation = function(location){
     var currentUser = Parse.User.current();
     var point = new Parse.GeoPoint({latitude: location.coords.latitude, longitude: location.coords.longitude});
 //    console.log()
-    currentUser.set("currentLocation",point);
-    currentUser.save();
+//    currentUser.set("currentLocation",point);
+//    currentUser.save();
 }
 
 myApp.controller('RegisterController', function ($scope) {
