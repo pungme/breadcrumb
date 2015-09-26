@@ -77,6 +77,7 @@ myApp.controller('AppController', function($scope) {
 //                
 //              $scope.userLocation = userPosition;
               $scope.userLocation = userPosition;
+                console.log($scope.userLocation);
                 $scope.$apply();
             },
             fail:function(){
