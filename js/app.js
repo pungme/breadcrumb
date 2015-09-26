@@ -9,28 +9,53 @@
 Parse.initialize("rddppjY9BaftUHY50Ze84iO4iSBB2tEmnyJvgwyf", "GwRsQZtgtLZSDtsokHW9hXeDBQq5pWCV");
 
 // create the module and name it scotchApp
-var myApp = angular.module('myApp', ['ngMap']);
+var myApp = angular.module('myApp', ['ngMap','ngDialog']);
 
 
-myApp.controller('AppController', function($scope) {
+myApp.controller('AppController', function($scope, ngDialog ) {
 //    $scope.message = 'Contact us! JK. This is just a demo.';
 //    console.log($scope.message);
-    $scope.positions = [{lat:37.7699298,lng:-122.4469157}];
-
-    $scope.cities = {
-        chicago: {population:27, position: [41.878113, -87.629798]},
-        newyork: {population:53, position: [40.714352, -74.005973]},
-        losangeles: {population:82, position: [34.052234, -118.243684]},
-        vancouver: {population:56, position: [49.25, -123.1]},
-    }
+//    $scope.positions = [{lat:37.7699298,lng:-122.4469157}];
+//
+//    $scope.cities = {
+//        chicago: {population:27, position: [41.878113, -87.629798]},
+//        newyork: {population:53, position: [40.714352, -74.005973]},
+//        losangeles: {population:82, position: [34.052234, -118.243684]},
+//        vancouver: {population:56, position: [49.25, -123.1]},
+//    }
     $scope.getRadius = function(num) {
         return Math.sqrt(num) * 100;
     }
 
-
     $scope.userLocation;
     //@pung get current location code
-     $scope.getLocation = function(callback){
+    
+//    $scope.updateUserLocation = function(username, geoLocation) {
+//        var User = Parse.Object.extend("User");
+//        var query = new Parse.Query(User);
+//        query.equalTo("username", username);
+//        query.find({
+//          success: function(results) {
+//            console.log("Successfully retrieved " + results.length + " user.");
+//            // Do something with the returned Parse.Object values
+//               user = results[0];
+//              console.log(user.id + ' - ' + user.get('username'));
+//
+//            user.save(null, {
+//              success: function(user) {
+//                user.set("currentLocation",geoLocation);
+//                user.save();
+//              }
+//            });
+//
+//          },
+//          error: function(error) {
+//            console.log("Error: " + error.code + " " + error.message);
+//          }
+//        });
+//    }
+    
+    $scope.getLocation = function(callback){
         var stillWaitForUserLocation = true;
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function(position){
@@ -84,8 +109,34 @@ myApp.controller('AppController', function($scope) {
                 //user denied the location
          }
     });
-    },
-    1000 //check every 30 seconds
-    );
+    },10000);
+    
+    $scope.openRegisterDialog = function() {
+//        $scope.setMainViewBlur(true);
+        ngDialog.open({
+            template: 'templates/registerTemplate.html',
+            controller: 'RegisterController',
+            className: 'ngdialog-theme-default',
+            showClose : false,
+            preCloseCallback: function(value) {
+                $scope.setMainViewBlur(false);
+            }
+        });
+    };
+    
+    $scope.setMainViewBlur = function(isBlur){
+        if(isBlur){
+            $('#main-view').addClass("blur");
+        }else{
+            $('#main-view').removeClass("blur");
+        }
+    }
+    
+    //if no current user, open the register Dialog
+//    $scope.openRegisterDialog();
 
+});
+
+myApp.controller('RegisterController', function ($scope) {
+    
 });
