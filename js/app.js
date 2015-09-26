@@ -4,6 +4,10 @@
 /**
  * Created by mahabubakram on 4/22/2015.
  */
+
+//init the freaking app
+Parse.initialize("rddppjY9BaftUHY50Ze84iO4iSBB2tEmnyJvgwyf", "GwRsQZtgtLZSDtsokHW9hXeDBQq5pWCV");
+                 
 // create the module and name it scotchApp
 var myApp = angular.module('myApp', ['ngMap']);
 
