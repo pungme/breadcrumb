@@ -101,7 +101,7 @@ myApp.controller('AppController', function($scope, ngDialog ) {
     },3000);
     
     $scope.openRegisterDialog = function() {
-//        $scope.setMainViewBlur(true);
+        $scope.setMainViewBlur(true);
         ngDialog.open({
             template: 'templates/registerTemplate.html',
             controller: 'RegisterController',
@@ -115,19 +115,19 @@ myApp.controller('AppController', function($scope, ngDialog ) {
     
     $scope.setMainViewBlur = function(isBlur){
         if(isBlur){
-            $('#main-view').addClass("blur");
+            $('#map-main').addClass("blur");
         }else{
-            $('#main-view').removeClass("blur");
+            $('#map-main').removeClass("blur");
         }
     }
     
     //if no current user, open the register Dialog
-    if(!Parse.User.current()){
+//    if(!Parse.User.current()){
         $scope.openRegisterDialog()
-    }else{
+//    }else{
 //        $scope.getNearByUsers(userPosition.coords.latitude,userPosition.coords.longitude)
         // update user locations
-    }
+//    }
 
     
     $scope.getNearByUsers = function (userLatitude, userLongitude) {
@@ -167,7 +167,7 @@ myApp.controller('RegisterController', function ($scope) {
 
         var user = new Parse.User();
         user.set("username", username);
-        user.set("password", password);
+        user.set("password", "123");
 
         //user.set("userLevel", 0);
 

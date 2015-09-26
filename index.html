@@ -36,17 +36,19 @@
 <body ng-controller="AppController">
 <!--<div id="map"></div>-->
 
-<div class="container-fluid">
+<div class="container-fluid" id="map-main">
 
-        <map center="{{userLocation.coords.latitude}}, {{userLocation.coords.longitude}}" zoom="17"
-           map-type-id="TERRAIN" class="mapcanvas" 
+        <map center="48.1241775,11.5983257" zoom="19"
+          class="mapcanvas" 
           street-view-control="false"
           disable-default-u-i="true"
           zoom-control="false"
           draggable="false">
->
-            <marker position="{{latit}}, {{longit}}" icon="{path:'CIRCLE', scale: 10}" id="markerInit"></marker>
+
+<!--            <marker position="{{latit}}, {{longit}}" icon="{path:'CIRCLE', scale: 10}" id="markerInit"></marker>-->
         </map>
+    
+    
 </div>
 </body>
 
