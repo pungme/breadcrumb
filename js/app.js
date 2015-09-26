@@ -187,7 +187,7 @@ myApp.controller('RegisterController', function ($scope) {
                         console.log('New user created with objectId: ' + userDetails.id);
                         // start the game !
                     },
-                    error : function(bcVar, error) {
+                    error : function(userDetails, error) {
                         // Execute any logic that should take place if the save fails.
                         // error is a Parse.Error with an error code and message.
                         console.log('Failed to create new object, with error code: '
@@ -235,7 +235,7 @@ myApp.controller('RegisterController', function ($scope) {
 //					console.log('New user created with objectId: ' + userDetails.id);
 //                    // start the game !
 //				},
-//				error : function(bcVar, error) {
+//				error : function(userDetails, error) {
 //					// Execute any logic that should take place if the save fails.
 //					// error is a Parse.Error with an error code and message.
 //					console.log('Failed to create new object, with error code: '
