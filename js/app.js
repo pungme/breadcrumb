@@ -79,7 +79,10 @@ myApp.controller('AppController', function($scope, ngDialog ) {
     setInterval(function () {
         if($scope.locationList.length > 5){
             $scope.locationList.shift();
-            $scope.fakeUserLocation = $scope.locationList[0];
+            
+//            if($scope.locationList.length > 4){
+                $scope.fakeUserLocation = $scope.locationList[0];
+//            }
             $scope.$apply();
         }
     },2000);
