@@ -2,6 +2,9 @@ Parse.initialize("rddppjY9BaftUHY50Ze84iO4iSBB2tEmnyJvgwyf", "GwRsQZtgtLZSDtsokH
 
 var username = "Praveer";
 var pass = "praveer";
+var point = new Parse.GeoPoint({latitude: 43.0, longitude: -37.0});
+
+createBreadCrumb(username,point, "hallo" );
 
 Parse.User.logIn(username, pass, {
   success: function(user) {
@@ -37,6 +40,45 @@ function updateUserLocation(username, geoLocation) {
 	  },
 	  error: function(error) {
 	    console.log("Error: " + error.code + " " + error.message);
+	  }
+	});
+
+}
+
+function register(username, password){
+	
+	var user = new Parse.User();
+	user.set("username", username);
+	user.set("password", password);
+
+	user.signUp(null, {
+	  success: function(user) {
+	    // Hooray! Let them use the app now.
+	  },
+	  error: function(user, error) {
+	    // Show the error message somewhere and let the user try again.
+	    alert("Error: " + error.code + " " + error.message);
+	  }
+	});
+}
+
+function createBreadCrumb(username, geoPoint, note){
+	var BC = Parse.Object.extend("BreadCrum");
+	var bcVar = new BC();
+
+	bcVar.set("username", username);
+	bcVar.set("note", note);
+	bcVar.set("geoPoint", geoPoint);
+
+	bcVar.save(null, {
+	  success: function(bcVar) {
+	    // Execute any logic that should take place after the object is saved.
+	    alert('New breadcrumb created with objectId: ' + bcVar.id);
+	  },
+	  error: function(bcVar, error) {
+	    // Execute any logic that should take place if the save fails.
+	    // error is a Parse.Error with an error code and message.
+	    alert('Failed to create new object, with error code: ' + error.message);
 	  }
 	});
 
