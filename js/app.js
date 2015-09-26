@@ -70,13 +70,13 @@ myApp.controller('AppController', function($scope) {
     setInterval( function () {
          $scope.getLocation({
             success:function(userPosition){
-              $scope.userLocation.coords.latitude = $scope.userLocation.coords.latitude + 1;
-                $scope.$apply();
-              console.log($scope.userLocation.coords.latitude);
+//              $scope.userLocation.coords.latitude = $scope.userLocation.coords.latitude + 1;
+//                $scope.$apply();
+//              console.log($scope.userLocation.coords.latitude);
 //              console.log(userPosition.coords.longitude);
 //                
 //              $scope.userLocation = userPosition;
-//              $scope.userLocation = userPosition;
+              $scope.userLocation = userPosition;
                 $scope.$apply();
             },
             fail:function(){

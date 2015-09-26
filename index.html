@@ -17,7 +17,12 @@
 
 <body ng-controller="AppController">
 <div class="container-fluid">
-    <map center="{{userLocation.coords.latitude}}, {{userLocation.coords.longitude}}" zoom="18" on-click="addMarker()" map-type-id="TERRAIN" class="mapcanvas" street-view-control="false">
+    <map center="{{userLocation.coords.latitude}}, {{userLocation.coords.longitude}}" 
+         zoom="17" on-click="addMarker()" 
+         map-type-id="TERRAIN" class="mapcanvas" 
+         street-view-control="false"
+         disable-default-u-i="true"
+         zoom-control="false">
 
         <!--<marker ng-repeat="city in cities" position="{{city.position[0]}}, {{city.position[1]}}"></marker>-->
         <marker position="{{userLocation.coords.latitude}}, {{userLocation.coords.longitude}}"></marker>
