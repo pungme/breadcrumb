@@ -110,86 +110,77 @@ function createBreadCrumb(user, geoPoint, note) {
 	});
 }
 
-	function eatUser(user1, user2) {
+function processEatUser(user1Id, user2Id) {
 
-	    var user1Id = user1.id;
-	    var user2Id = user2.id;
+    eatUser(user1Id, function(user1Detail) {
+        eatUser(user2Id, function(user2Detail) {
 
-	    var UserDetails = Parse.Object.extend("UserDetails");
-	    var queryUserDetails = new Parse.Query(UserDetails);
+            var user1Level = user1Detail.get('userLevel');
+            var user2Level = user2Detail.get('userLevel');
 
-	    queryUserDetails.equalTo("user", {__type: "Pointer", className: "_User", objectId:user1Id});
-	    queryUserDetails.find({
-	        success: function(results) {
-	            console.log("Successfully retrieved " + results.length );
-	            // Do something with the returned Parse.Object values
-	            var user1Detail = results[0];
+            if (user1Level > 0 && user2Level > 0) {
+                if (user1Level > user2Level) {
 
-	            queryUserDetails.equalTo("user", {__type: "Pointer", className: "_User", objectId:user2Id});
-	            queryUserDetails.find({
-	                success: function(results) {
-	                    console.log("Successfully retrieved " + results.length );
-	                    // Do something with the returned Parse.Object values
-	                    var user2Detail = results[0];
+                    user2Detail.save(null, {
+                        success : function(userDetail) {
+                            userDetail.set("userLevel", 0);
+                            userDetail.save();
+                        }
+                    });
 
-	                    var user1Level = user1Detail.get('userLevel');
-	                    var user2Level = user2Detail.get('userLevel');
+                    user1Detail.save(null, {
+                        success : function(userDetail) {
+                            userDetail.set("userLevel", user1Level + user2Level);
+                            var eatenUserArray = userDetail.get("eatenUsers");
+                            if (eatenUserArray !== undefined && eatenUserArray.indexOf(user2Id) == -1) {
+                                eatenUserArray.push(user2Id);
+                            } else if(eatenUserArray === undefined) {
+                                eatenUserArray = [];
+                                eatenUserArray.push(user2Id);
+                            }
+                            userDetail.set("eatenUsers", eatenUserArray);
+                            userDetail.save();
+                        }
+                    });
+                } else if (user1Level < user2Level) {
 
-	                    if (user1Level > 0 && user2Level > 0) {
-	                        if (user1Level > user2Level) {
+                    user2Detail.save(null, {
+                        success : function(userDetail) {
+                            userDetail.set("userLevel", user1Level + user2Level);
+                            var eatenUserArray = userDetail.get("eatenUsers");
+                            if (eatenUserArray !== undefined && eatenUserArray.indexOf(user1Id) == -1) {
+                                eatenUserArray.push(user1Id);
+                            }else if(eatenUserArray === undefined) {
+                                eatenUserArray = [];
+                                eatenUserArray.push(user1Id);
+                            }
+                            userDetail.set("eatenUsers", eatenUserArray);
+                            userDetail.save();
+                        }
+                    });
 
-	                            user2Detail.save(null, {
-	                                success : function(userDetail) {
-	                                    userDetail.set("userLevel", 0);
-	                                    userDetail.save();
-	                                }
-	                            });
+                    user1Detail.save(null, {
+                        success : function(userDetail) {
+                            userDetail.set("userLevel", 0);
+                            userDetail.save();
+                        }
+                    });
+                }
+            }
+        });
+    })
+}
 
-	                            user1Detail.save(null, {
-	                                success : function(userDetail) {
-	                                    userDetail.set("userLevel", user1Level + user2Level);
-	                                    var eatenUserArray = userDetail.get("eatenUsers");
-	                                    if (eatenUserArray !== undefined && eatenUserArray.indexOf(user2Id) == -1) {
-	                                        eatenUserArray.push(user2Id);
-	                                    }
-	                                    userDetail.set("eatenUsers", eatenUserArray);
-	                                    userDetail.save();
-	                                }
-	                            });
+function eatUser(userId, fn) {
 
+    queryUserDetails.equalTo("user", {__type: "Pointer", className: "_User", objectId:userId.toString()});
+    queryUserDetails.find({
+        success: function(results) {
+            fn(results[0]);
+        }
+    });
 
-
-	                        } else if (user1Level < user2Level) {
-
-	                            user2Detail.save(null, {
-	                                success : function(userDetail) {
-	                                    userDetail.set("userLevel", user1Level + user2Level);
-	                                    var eatenUserArray = userDetail.get("eatenUsers");
-	                                    if (eatenUserArray !== undefined && eatenUserArray.indexOf(user1Id) == -1) {
-	                                        eatenUserArray.push(user1Id);
-	                                    }
-	                                    userDetail.set("eatenUsers", eatenUserArray);
-	                                    userDetail.save();
-	                                }
-	                            });
-
-	                            user1Detail.save(null, {
-	                                success : function(userDetail) {
-	                                    userDetail.set("userLevel", 0);
-	                                    userDetail.save();
-	                                }
-	                            });
-	                        }
-	                    }
-
-
-	                }
-	            });
-
-	        }
-	    });
-	}
-
+}
 
 function eatBreadCrumb(user, breadCrumLocation) {
 
@@ -212,7 +203,13 @@ function eatBreadCrumb(user, breadCrumLocation) {
 				success : function(userDetail) {
 					userDetail.set("userLevel", userLevel + 1);
 					var eatenUserBCs = userDetail.get("eatenBreadCrumbs");
-					eatenUserBCs.push(breadCrumLocation);
+					
+					if (eatenUserBCs !== undefined && eatenUserBCs.indexOf(breadCrumLocation) == -1) {
+						eatenUserBCs.push(breadCrumLocation);
+                    } else if(eatenUserBCs === undefined) {
+                    	eatenUserBCs = [];
+                    	eatenUserBCs.push(breadCrumLocation);
+                    }
 					userDetail.set("eatenBreadCrumbs", eatenUserBCs);
 					userDetail.save();
 				}
@@ -221,3 +218,6 @@ function eatBreadCrumb(user, breadCrumLocation) {
 	});
 
 }
+
+
+
