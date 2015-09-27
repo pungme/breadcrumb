@@ -83,6 +83,7 @@ myApp.controller('AppController', function($scope, ngDialog ) {
         setInterval(function () {
             if($scope.locationList.length > 5){
                 $scope.locationList.shift();
+                $scope.markerScale +=0.65;
 
     //            if($scope.locationList.length > 4){
                     $scope.fakeUserLocation = $scope.locationList[0];
@@ -98,7 +99,7 @@ myApp.controller('AppController', function($scope, ngDialog ) {
                 $scope.fakeOpponentUserLocation = $scope.opponentLocationList[0];
                 $scope.$apply();
                 if($scope.opponentLocationList.length == 0){
-                    $scope.markerScale = "0";
+                    $scope.markerScale = "2";
                 }
     //        }
             },1500);
@@ -163,7 +164,7 @@ myApp.controller('AppController', function($scope, ngDialog ) {
                 console.log(gPos);
                 $scope.latit = gPos;
                 $scope.longit = userPosition.coords.longitude;
-                $scope.markerScale +=1;
+                //$scope.markerScale +=1;
                 console.log($scope.latit);
                 console.log($scope.longit);
                 console.log($scope.image);
