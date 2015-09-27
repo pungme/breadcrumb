@@ -51,6 +51,13 @@
             <div ng-repeat="location in locationList">
                 <marker position='{{location[0] + "," + location[1]}}' icon="{{image}}" id="markerInit" ></marker>
             </div>
+
+            <shape name="circle" stroke-color="#6C00D9" fill-color="#6C00D9" label= "Purple"
+                   fill-opacity="0.3" center='48.124282, 11.597762' radius="5"></shape>
+
+            <shape name="circle" stroke-color="#FF7F00" fill-color="#FF7F00" label= "Orange"
+                   fill-opacity="0.3" center='48.124113, 11.598164' radius="7"></shape>
+
             
             <shape name="circle" stroke-color="#FF0000" fill-color="#FF0000" label= "A"
                    fill-opacity="0.3" center='{{fakeOpponentUserLocation[0] + "," + fakeOpponentUserLocation[1]}}' radius="15"></shape>
