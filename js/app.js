@@ -72,7 +72,7 @@ myApp.controller('AppController', function($scope, ngDialog ) {
     ]
 
     $scope.image = {
-        url: 'img/beer.png',
+        url: 'img/green.png',
         size: [150, 92],
         origin: [0,0],
         anchor: [0, 32]
