@@ -30,6 +30,8 @@
         #map {
             height: 100%;
         }
+        .style1 {background-color:#ffffff;font-weight:bold;border:2px #006699 solid;}
+        .style2 {background-color:#ffcccc;}
     </style>
 
 </head>
@@ -45,17 +47,26 @@
           zoom-control="false"
           draggable="false">
 
+
             <div ng-repeat="location in locationList">
-            <marker position='{{location[0] + "," + location[1]}}' icon="{{image}}" id="markerInit"></marker>
+                <marker position='{{location[0] + "," + location[1]}}' icon="{{image}}" id="markerInit" ></marker>
             </div>
             
-            <shape name="circle" stroke-color="#FF0000" fill-color="#FF0000" labelContent= "A"
+            <shape name="circle" stroke-color="#FF0000" fill-color="#FF0000" label= "A"
                    fill-opacity="0.3" center='{{fakeOpponentUserLocation[0] + "," + fakeOpponentUserLocation[1]}}' radius="15"></shape>
-            
-            <shape name="circle" stroke-color="#4183D7" fill-color="#4183D7" labelContent= "A"
-                    center='{{fakeUserLocation[0] + "," + fakeUserLocation[1]}}' radius={{markerScale}}>
 
-            </shape>
+            <marker icon="{{image}}" position='{{fakeUserLocation[0] + "," + fakeUserLocation[1]}}' id="markerInit">
+                <shape name="circle" stroke-color="#4183D7" fill-color="#4183D7"  strokeWeight=2
+                       center='{{fakeUserLocation[0] + "," + fakeUserLocation[1]}}' radius={{markerScale}}></shape>
+            </marker>
+
+            <custom-control id="home" position='TOP_RIGHT' index="1" on-click="click()">
+                <div style="background-color:#4183D7; font-size: x-large; font-weight: bold;">Pung</div>
+            </custom-control>
+
+            
+<!--            <shape name="circle" stroke-color="#4183D7" fill-color="#4183D7"  label= "A"
+                    center='{{fakeUserLocation[0] + "," + fakeUserLocation[1]}}' radius={{markerScale}}></shape>-->
 
 <!--            <shape name="circle"  ng-repeat="location in locationList" stroke-color="#FF0000" stroke-opacity="0.8" stroke-weight="2" fill-color="#FF0000" labelContent= "A"
                    fill-opacity="0.3" center="location" radius="5">
@@ -65,12 +76,39 @@
 
 </div>
 </body>
-
+<script src="http://google-maps-utility-library-v3.googlecode.com/svn/tags/infobox/1.1.5/src/infobox.js"></script>
 <script type="text/javascript">
+
     $(document).ready(function () {
         var height = $(document).height() + "px";
         $(".mapcanvas").height(height);
     });
+
+    map = new google.maps.Map(document.getElementById('markerInit'));
+    var labelText = "Text goes here";
+
+    var myOptions = {
+        content: labelText,
+        boxStyle: {
+            background: '#FFFFFF',
+            border: "1px solid black",
+            textAlign: "center",
+            fontSize: "8pt",
+            width: "90px"
+        },
+        disableAutoPan: true,
+        pixelOffset: new google.maps.Size(-45, 0),
+        position: new google.maps.LatLng(48.124979, 11.599054),
+        closeBoxURL: "",
+        isHidden: false,
+        pane: "mapPane",
+        enableEventPropagation: true
+    };
+
+    var label = new InfoBox(myOptions);
+    label.open(map);
+
+    console.log(map);
 
 </script>
 

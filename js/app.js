@@ -34,6 +34,9 @@ myApp.controller('AppController', function($scope, ngDialog ) {
     $scope.longit;
     $scope.markerScale = 2;
 
+ /*   48.124078, 11.598735
+    48.123976, 11.598777*/
+
     $scope.locationList = [
         [48.124236, 11.598402, true],
         [48.124247, 11.598503, true],
@@ -45,6 +48,7 @@ myApp.controller('AppController', function($scope, ngDialog ) {
         [48.124061, 11.598993, true],
         [48.124007, 11.598912, true],
         [48.123968, 11.598859, true],
+        [48.124117, 11.598769, true],
         [48.124154, 11.598772, true],
         [48.124124, 11.597461, true],
         [48.123655, 11.597796, true],
@@ -279,6 +283,7 @@ myApp.controller('RegisterController', function ($scope) {
 	$scope.startButtonClick = function(){
 		//alert($scope.username + $scope.password);
 		$scope.register($scope.username, $scope.password);
+        console.log($scope.username);
         $scope.closeThisDialog();
 	}
     
