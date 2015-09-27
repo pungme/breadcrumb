@@ -79,30 +79,31 @@ myApp.controller('AppController', function($scope, ngDialog ) {
     };
 
 
-
-    setInterval(function () {
-        if($scope.locationList.length > 5){
-            $scope.locationList.shift();
-            
-//            if($scope.locationList.length > 4){
-                $scope.fakeUserLocation = $scope.locationList[0];
-//            }
-            $scope.$apply();
-        }
-    },2000);
-    
-    setTimeout(function(){
+    $scope.startTheGame = function(){
         setInterval(function () {
-//        if($scope.locationList.length > 5){
-            $scope.opponentLocationList.shift();
-            $scope.fakeOpponentUserLocation = $scope.opponentLocationList[0];
-            $scope.$apply();
-            if($scope.opponentLocationList.length == 0){
-                $scope.markerScale = "0";
+            if($scope.locationList.length > 5){
+                $scope.locationList.shift();
+
+    //            if($scope.locationList.length > 4){
+                    $scope.fakeUserLocation = $scope.locationList[0];
+    //            }
+                $scope.$apply();
             }
-//        }
-        },1500);
-    }, 9000);
+        },2000);
+
+        setTimeout(function(){
+            setInterval(function () {
+    //        if($scope.locationList.length > 5){
+                $scope.opponentLocationList.shift();
+                $scope.fakeOpponentUserLocation = $scope.opponentLocationList[0];
+                $scope.$apply();
+                if($scope.opponentLocationList.length == 0){
+                    $scope.markerScale = "0";
+                }
+    //        }
+            },1500);
+        }, 9000);
+    }
 //    setInterval(function () {
 ////        if($scope.locationList.length > 5){
 //            $scope.opponentLocationList.shift();
@@ -187,6 +188,7 @@ myApp.controller('AppController', function($scope, ngDialog ) {
             showClose : false,
             preCloseCallback: function(value) {
                 $scope.setMainViewBlur(false);
+                $scope.startTheGame();
             }
         });
     };
