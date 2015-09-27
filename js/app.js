@@ -189,6 +189,7 @@ myApp.controller('AppController', function($scope, ngDialog ) {
             preCloseCallback: function(value) {
                 $scope.setMainViewBlur(false);
                 $scope.startTheGame();
+                $scope.username = globalUserName;
             }
         });
     };
@@ -284,6 +285,7 @@ myApp.controller('RegisterController', function ($scope) {
     }
 	$scope.startButtonClick = function(){
 		//alert($scope.username + $scope.password);
+        globalUserName = $scope.username;
 		$scope.register($scope.username, $scope.password);
         console.log($scope.username);
         $scope.closeThisDialog();
